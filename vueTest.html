@@ -1,0 +1,86 @@
+<html>
+<head>
+    <script>
+        var nativeValue = 'no data';
+        function prepareDataFromNative(params) {
+            nativeValue = params;
+            return params;
+        }
+        if (judgeClient() == 'iOS') {
+            window.webkit.messageHandlers.prepareDataFromNative.postMessage(null);
+        } else {
+            $App.prepareDataFromNative(null);
+        }
+        function backClick(event) {
+            if (judgeClient() == 'iOS') {
+                window.webkit.messageHandlers.getDataFormVue.postMessage(app.money);
+            } else {
+                $App.getDataFormVue(app.money);
+            }
+            app.message = "call myDiv";
+        }
+
+        function judgeClient() {
+            let client = '';
+            if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  
+            client = 'iOS';
+            } else if (/(Android)/i.test(navigator.userAgent)) { 
+            client = 'Android';
+            } else {
+            client = 'PC';
+            }
+            return client;
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>    
+        
+    </script>
+
+    
+
+    <div id="app">
+        <p>
+            {{ message }}
+        </p>
+
+        <button v-on:click="myDiv">
+            myDiv
+        </button>
+
+        <button v-on:click="greet">Greet</button>
+
+    </div>
+
+    <script>
+
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: nativeValue,
+                money: 'i am your father',
+                name: 'ni ma de '
+            },
+            // create() {
+            //     //Vue的方法给原生调用，则需要把方法挂在Window下面
+            //     window.prepareDataFromNative = this.prepareDataFromNative;
+            // }
+            // ,
+            methods: {
+                greet: function (event) {
+                    window.webkit.messageHandlers.getDataFormVue.postMessage(app.money);
+                },
+                myDiv: window.backClick,
+            }
+
+        })
+
+        app.message = nativeValue;
+
+    </script>
+    
+</body>
+
+</html>
